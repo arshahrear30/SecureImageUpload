@@ -10,3 +10,6 @@ implementation 'com.android.volley:volley:1.2.1'
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ## 3059 3060 3061 same kaz
 3059 xml create 3060 app a bitmap code show 3061 server a php dia bitmap code show
+3062 server a ki bitmap code গেছে কিনা php দিয়ে if else condition দিয়ে হ্যা না eco করছি 
+
+
