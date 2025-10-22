@@ -1,8 +1,11 @@
 package com.arshahrear.imageupload;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +16,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -28,6 +35,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,12 +83,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //3065iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+        //আমরা প্রথমে ছবিটা অ্যাপস এর মধ্যে রাখবো যাতে গ্যালারিতে নেওয়ার সাথে সাথে অ্যাপস এর মধ্যে শো করে তারপর সাবমিট বাটনে ক্লিক করলে তখন সেটা
+        // সার্ভারে যাবে এতে করে ইউজার এক্সপেরিয়েন্স ভালো হবে আর যদি শুরুতেই আমরা সার্ভারে দিতে যাই তাহলে এটা লোড হয়ে আসতে আসতে অনেক সময় লাগবে
 
         imageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                
+                Intent intentgalary = new Intent(Intent.ACTION_PICK);
+                intentgalary.setType("image/*");
+                gallerylauncher.launch(intentgalary);
+
+
+
 
             }
         });
@@ -88,7 +103,38 @@ public class MainActivity extends AppCompatActivity {
         //3065iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
     }
 
-    //================================stringRequest
+    //registerForActivityResult এর কাজ হইলো gallary থেকে image selection এ help করা
+    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    ActivityResultLauncher<Intent> gallerylauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) { //image click er por result dibay kon image select korcay
+
+                    if (result.getResultCode() == RESULT_OK) {
+                       tvDisplay.setText("Image Selected");
+                       Intent data = result.getData();
+                       Uri uri = data.getData(); //image er url .. online hoilay url bolay .. ofline file hoilay uri bolay
+
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                            imageView.setImageBitmap(bitmap);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }else {
+                        tvDisplay.setText("Image not Selected");
+                    }
+
+
+                }
+            });
+
+
+            //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+            //================================stringRequest
 
     private void stringRequest(String image64){
         progressBar.setVisibility(View.VISIBLE);
