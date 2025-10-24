@@ -16,3 +16,11 @@ implementation 'com.android.volley:volley:1.2.1'
 যদি এখন টেবিল create করে image .jpeg link ta রেখে দেই তাহলে ফাস্ট kaz korbay ..
 
 ## 3069  image upload - direct camera and gallery (use library)
+
+Search on chrome : image picker android library
+https://github.com/Dhaval2404/ImagePicker  এটায় ঢুকলাম 
+setting.gradle : maven { url "https://jitpack.io" } add this line on ( dependencyResolutionManagement এর মধ্যে  )
+
+implementation 'com.github.dhaval2404:imagepicker:2.1' add on build.gradle(Module:app) এটায় auto camera permission নেওয়া আছে । 
+বাকিডা code 3069 এ দেখো ।  https://github.com/arshahrear30/SecureImageUpload/blob/main/3069%20MainActivity.java
+
