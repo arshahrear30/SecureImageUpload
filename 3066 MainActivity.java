@@ -1,6 +1,8 @@
 package com.arshahrear.imageupload;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -22,6 +24,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -90,9 +94,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                /*
                 Intent intentgalary = new Intent(Intent.ACTION_PICK);
                 intentgalary.setType("image/*");
-                gallerylauncher.launch(intentgalary);
+                gallerylauncher.launch(intentgalary); */
+
+                if (checkCameraPermission()) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 100);
+
+                }
 
 
 
@@ -102,6 +113,32 @@ public class MainActivity extends AppCompatActivity {
 
         //3065iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
     }
+
+    //{{{{{{{{{{{{{{{{{{{{{{{{{{{{{
+    private boolean checkCameraPermission(){
+
+        boolean hasPermission = false;
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) //already permission newa asey
+        {hasPermission = true;
+        }else {
+            hasPermission = false;
+            ActivityCompat.requestPermissions(this , new String[]{Manifest.permission.CAMERA},100); //string array call korci
+
+        }
+
+        return hasPermission;
+
+
+
+    }
+
+
+
+    //{{{{{{{{{{{{{{{{{{{{{{{{{{{{{
+
+
+
 
     //registerForActivityResult এর কাজ হইলো gallary থেকে image selection এ help করা
     //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
