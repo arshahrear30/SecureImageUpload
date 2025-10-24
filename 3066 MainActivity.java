@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (checkCameraPermission()) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 100);
+                    cameraLauncher.launch(intent);
+
 
                 }
 
@@ -113,6 +114,33 @@ public class MainActivity extends AppCompatActivity {
 
         //3065iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
     }
+
+    //"""""""""""""""""""""""""""""""""""""" camera launcher create
+
+    ActivityResultLauncher<Intent> cameraLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        tvDisplay.setText("Image Selected");
+                        Intent data = result.getData();
+                        Bundle bundle = data.getExtras();
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        imageView.setImageBitmap(bitmap);
+
+
+                    }else {
+                        tvDisplay.setText("Image not Selected");
+                    }
+
+
+
+                }
+            });
+
+
+    //""""""""""""""""""""""""""""""""""""""
 
     //{{{{{{{{{{{{{{{{{{{{{{{{{{{{{
     private boolean checkCameraPermission(){
